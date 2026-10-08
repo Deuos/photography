@@ -1,0 +1,33 @@
+name: Strip EXIF
+
+# Runs whenever photos are pushed (including uploads through github.com) and replaces them with cleaned copies.
+on:
+  push:
+    paths:
+      - 'photos/**'
+
+permissions:
+  contents: write
+
+jobs:
+  strip-exif:
+    # Do not re-run on the commit this workflow creates
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run strip-exif
+      - name: Commit cleaned photos
+        run: |
+          if [ -n "$(git status --porcelain photos)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add photos
+            git commit -m "Strip EXIF location and timestamps"
+            git push
+          fi

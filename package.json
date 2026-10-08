@@ -1,0 +1,12 @@
+{
+  "name": "photography",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "strip-exif": "node scripts/strip-exif.mjs"
+  },
+  "devDependencies": {
+    "exiftool-vendored": "latest"
+  }
+}
