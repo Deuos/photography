@@ -11,20 +11,19 @@ scripts/   strip-exif.mjs
 
 `npm run strip-exif` cleans every file in `photos/`.
 
-- **Kept:** camera make and model, lens, focal length, aperture, shutter speed, ISO, exposure settings, flash, white balance, orientation, colour profile.
-- **Removed:** GPS and any location data, every date and time, serial numbers, artist or copyright, thumbnails, maker notes, XMP and IPTC.
+- **Kept:** camera make and model, lens, focal length, aperture, shutter speed, ISO, exposure settings, flash, white balance, capture date and time, orientation, colour profile.
+- **Removed:** GPS and any location data, serial numbers, artist or copyright, thumbnails, maker notes, XMP and IPTC.
 
-It is safe to run repeatedly. A GitHub Action (`.github/workflows/strip-exif.yml`) runs it on every push that touches `photos/` and commits the cleaned files, so uploads made from github.com or a phone are covered too.
-
-Because the Action cleans files after they are pushed, the original is briefly in git history. To keep originals out entirely, run the script locally before committing:
+It is safe to run repeatedly, and it edits files in place, so run it before committing. There is no automation: photos uploaded without running it keep their original metadata, including GPS.
 
 ```bash
 npm install        # first time only
 npm run strip-exif
+git add photos && git commit && git push
 ```
 
 ## Tips
 
-- Name files `YYYY-MM-DD-name.jpg`. The site sorts by filename, newest first, and timestamps are stripped from the files themselves.
+- Name files `YYYY-MM-DD-name.jpg`. The site sorts by filename, newest first.
 - Resize to about 2000px on the long edge. The site loads the files as they are.
 - Avoid spaces and unusual characters in filenames.
